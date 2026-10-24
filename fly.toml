@@ -1,0 +1,48 @@
+# Fly.io config — same shape as Pinakes, so there's one deployment story.
+#
+#   fly launch --no-deploy      (once, to create the app)
+#   fly volumes create eunomia_data --size 1
+#   fly deploy
+#
+# The nightly Crossref refresh must run ON the machine that holds the volume.
+# `fly machine run` starts a SEPARATE machine, and a Fly volume attaches to only
+# one machine at a time, so that machine's write would be discarded:
+#
+#   fly ssh console -C "python /app/crossref_refresh.py"
+
+app = "eunomias-labors"
+primary_region = "sjc"   # closest Fly region to Bremerton; Pinakes runs here too
+
+[build]
+
+[env]
+  PORT = "8080"
+  CROSSREF_MAILTO = "jlewis2@olympic.edu"
+  CANONICAL_HOST = "eunomiaslabors.xyz"
+
+[[mounts]]
+  source = "eunomia_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 40
+    hard_limit = 80
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  grace_period = "10s"
+  method = "GET"
+  path = "/"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

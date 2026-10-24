@@ -1,0 +1,88 @@
+{# The live coverage table. Data comes from data/coverage.json, refreshed nightly
+   by crossref_refresh.py.
+
+   Two columns, because the site offers two services. "DOI records" is the
+   minting half: how much of the journal's published output is registered at all.
+   "Reference lists" is the backfill half: how many of those records carry their
+   works cited. A journal can score 100% on the first and 0% on the second, and
+   several here do.
+
+   Sorted worst-first, so a reader finds their own journal in the part of the
+   table that makes the argument. #}
+
+{% if cov.journals %}
+
+<div class="table-tools">
+  <label for="journal-filter">Find your journal</label>
+  <input type="search" id="journal-filter" name="journal-filter"
+         autocomplete="off" placeholder="Type a journal name">
+  <span id="result-count" role="status"></span>
+</div>
+
+<div class="table-wrap" tabindex="0" role="region"
+     aria-label="DOI and reference-list coverage by journal, scrollable">
+  <table class="coverage" id="coverage-table">
+    <caption>
+      What share of each journal's published record carries a DOI, and what share of those
+      DOI records carries a deposited reference list. Pulled live from
+      api.crossref.org{% if cov.generated %}, last updated {{ cov.generated[:10] }}{% endif %}.
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Journal</th>
+        <th scope="col" class="num">DOI records</th>
+        <th scope="col" class="num">Reference lists</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for j in cov.journals %}
+      <tr{% if j.status == 'done' %} class="mine"{% endif %}
+         data-name="{{ j.name|lower }}{% if j.publisher and j.publisher|lower != j.name|lower %} {{ j.publisher|lower }}{% endif %}">
+        <th scope="row">
+          <em>{{ j.name }}</em>
+          {%- if j.publisher and j.publisher|lower != j.name|lower %}
+          <span class="pub"><span class="vh">, published by </span>{{ j.publisher }}</span>
+          {%- endif %}
+        </th>
+
+        <td class="num">
+          <span class="count">{{ "{:,}".format(j.records) }}</span>
+          {% if j.doi_percent is not none %}
+            <span class="pct {{ 'none' if j.doi_percent == 0 else ('good' if j.doi_percent >= 60 else 'partial') }}">{{ "%.0f"|format(j.doi_percent) }}%</span>
+          {% else %}
+            <span class="pct unknown">—<span class="vh"> no article count available, so no percentage</span></span>
+          {% endif %}
+        </td>
+
+        <td class="num">
+          <span class="count">{{ "{:,}".format(j.with_references) }}</span>
+          {%- if j.status == 'done' %}<span class="vh"> reference lists deposited by Eunomia's Labors</span>{% endif %}
+          {% if j.records %}
+            <span class="pct {{ j.tier }}">{{ "%.1f"|format(j.percent) }}%</span>
+          {% else %}
+            <span class="pct no-dois">none to carry</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p id="no-results" hidden>No journal by that name in the survey. If yours is missing, that's worth
+  telling me — <a href="{{ url_for('start') }}">send it along</a> and I'll add it.</p>
+</div>
+
+<p class="table-note">Marked rows, highlighted on screen, are journals whose reference lists I
+deposited this year.
+The DOI percentage measures Crossref registrations against the article count
+<a href="{{ pinakes_url }}/coverage">Pinakes</a> has indexed for that journal, which is the closest
+available stand-in for what a journal has actually published; where Pinakes draws its own records
+from Crossref the two agree by construction, so read 100% there as &ldquo;nothing missing that
+Crossref knows about&rdquo; rather than as an independent check. An em dash means no article count
+is available.</p>
+
+{% else %}
+
+<p class="callout">The coverage table hasn't been generated yet. Run
+<code>python crossref_refresh.py</code> to build it.</p>
+
+{% endif %}

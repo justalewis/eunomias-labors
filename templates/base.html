@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ site_name }}{% endblock %}</title>
+<meta name="description" content="{% block description %}Free help for rhetoric and composition journals registering DOIs with Crossref and depositing the reference lists that go with them. Six journals, 31,053 references so far.{% endblock %}">
+<link rel="canonical" href="{{ request.base_url }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+<meta property="og:description" content="{{ self.description() }}">
+<meta property="og:url" content="{{ request.base_url }}">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+<link rel="alternate icon" href="{{ url_for('static', filename='favicon.png') }}">
+<meta name="theme-color" content="#F5EFE1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171512" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="{{ url_for('static', filename='fonts.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='tokens.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="wordmark" href="{{ url_for('landing') }}">
+      <span class="name">{{ site_name }}</span>
+      <span class="sub">{{ tagline }}</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="{{ url_for('how') }}"{% if page == 'how' %} aria-current="page"{% endif %}>How it works</a>
+      <a href="{{ url_for('pinakes') }}"{% if page == 'pinakes' %} aria-current="page"{% endif %}>Eunomia and Pinakes</a>
+      <a href="{{ url_for('start') }}"{% if page == 'start' %} aria-current="page"{% endif %}>Start a conversation</a>
+      <a class="out" href="{{ pinakes_url }}">Pinakes</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+{% block content %}{% endblock %}
+<svg class="coronis" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img"
+     aria-label="Coronis — the mark that closed a section in a papyrus roll">
+  <path d="M5 15c4 0 5-8 9-8s5 4 5 4"/><path d="M9 19h9"/>
+</svg>
+</main>
+
+<footer class="site">
+  <div class="inner">
+    <p>{{ site_name }} is run by Justin Lewis, who teaches English at Olympic College and is
+       Design and Layout Editor at <em>Literacy in Composition Studies</em>. Write to him at
+       <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>. It's a sister site to
+       <a href="{{ pinakes_url }}">Pinakes</a>. The tools behind it are
+       <a href="{{ github_url }}">open source</a>.</p>
+    <p class="data-line">All figures pulled from Crossref's public API.
+      {%- if cov.generated %} Last updated {{ cov.generated[:10] }}.{% endif %}
+      The queries are reproducible and the method is on the
+      <a href="{{ url_for('how') }}#method">FAQ</a> page.</p>
+  </div>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

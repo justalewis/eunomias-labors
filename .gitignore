@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+data/submissions.sqlite3
+data/*.json.tmp
+.env
+.venv/
+static/tokens-upstream.css

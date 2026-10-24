@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Eunomia and Pinakes — {{ site_name }}{% endblock %}
+{% block description %}Why I offer this work: I built Pinakes, an open index of Writing Studies scholarship, and it only works as well as the field's deposited reference lists allow.{% endblock %}
+
+{% block content %}
+
+<section class="prose">
+  <h1 class="page-title">Why I'm offering to do this</h1>
+
+  <p class="lede">I built <a href="{{ pinakes_url }}">Pinakes</a>, an open index of this field's
+  scholarship, and it gets better in direct proportion to how much of the field's metadata exists in a
+  form it can read. When your journal deposits its reference lists, my tool improves, which makes me an interested party in the work I am proposing to do for you. That same interest is what keeps me careful, because a sloppy deposit does not disappear into your records and stay there. It ends up in my index, where I have to look at it and where it would skew the analyses Pinakes is built to produce.</p>
+</section>
+
+<section class="prose">
+  <h2 class="heading">What an index can't see</h2>
+
+  <p>Pinakes currently (as of 2026-08-31) holds 54,231 articles across 55 journals, and 519,154 citation
+  edges of which 10.9 percent resolve to something inside the index. Roughly 29 of those journals
+  deposit reference lists. The rest appear in search results and on the publication timeline, then drop
+  out of every citation view the index can build — they have deposited no references for it to
+  read.</p>
+
+  <p>Bibliometrics has a name for an article that goes unread for years and then becomes central: a
+  sleeping beauty. <a href="https://pinakes.xyz/explore#sleeping-beauties">Pinakes can identify
+  them</a>, and it can manufacture them just as readily. If an article is widely cited while the journals citing it have never deposited their references, that article appears dormant in the record although it is being cited steadily in places the index cannot see.</p>
+
+  <p>Every citation analysis of this field currently carries that distortion. It falls on the field's own open-access journals and on nearly everything published before roughly 2000. Any claim about who influenced whom, or about whose work holds a subfield together, is therefore being made on a record with those absences already built into it, at least if you're approaching that claim from a quantitative bibliometric
+  perspective.</p>
+</section>
+
+<section class="prose">
+  <h2 class="heading">What a deposited reference list makes possible</h2>
+
+  <p>Reference lists are the raw material for every relational tool in Pinakes. Co-citation shows
+  which works get cited together often enough to constitute a conversation. Bibliographic coupling
+  finds articles drawing on the same sources without citing each other. Centrality measures identify
+  the work holding a subfield together, and main path analysis traces how an idea moved from one
+  article to the next across decades. Community detection finds clusters the field hasn't named.
+  Citation half-life shows how long work in a given venue stays in circulation.</p>
+
+  <p>None of those measures run on articles. They run on citation counts, so a journal that has not deposited its references participates in none of them.</p>
+
+  <p>Citational justice is the case I would put to an editorial team or board first. This field has a long
+  history of absorbing foundational work by women and by scholars of color
+  into its common sense and then losing the practice of citing that work — a pattern Lewis and
+  Lockhart (forthcoming <em>Composition Studies</em>) document in one journal's self-audit of its own
+  citational practice, and one Moore et al. document across technical and professional communication
+  more broadly. A citation graph makes that kind of asymmetry visible in quantitative terms and lets
+  an editorial team or board check its own record against it. Without deposited reference lists, the audit
+  can't be run at all.</p>
+
+  <p>The objections to bibliometrics are real. Acknowledgement is not influence, and a visualization can reify the very thing it claims to describe. I'd still argue we could do more of
+  this work as a field, alongside the critical bibliometric literacy that ought to come with it.
+  Neither is possible on a record this incomplete.</p>
+</section>
+
+<section class="prose">
+  <h2 class="heading">The exchange</h2>
+
+  <p>A better index follows from better deposits, and what your journal gets in return is citation visibility for the work it publishes and for its authors, whose scholarship becomes traceable in OpenAlex, in Scopus-adjacent tooling, in Zotero, and in every service that reads Crossref. Those services must otherwise crawl your site and hope. Both outcomes serve the field before they serve either of us.</p>
+
+  <p class="btn-row"><a class="btn" href="{{ url_for('start') }}">Start a conversation</a></p>
+</section>
+
+{% endblock %}

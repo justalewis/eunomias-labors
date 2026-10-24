@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Got it — {{ site_name }}{% endblock %}
+{% block description %}Your note came through.{% endblock %}
+
+{% block content %}
+
+<section class="prose">
+  <h1 class="page-title">Got it</h1>
+  <p class="lede">I'll write back within a few days, and it'll be a real answer about your journal
+  rather than a form letter. If it's urgent or you'd rather go around this form entirely, my address
+  is <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>
+
+  <p class="btn-row"><a class="btn" href="{{ url_for('landing') }}">Back to the front page</a></p>
+</section>
+
+{% endblock %}

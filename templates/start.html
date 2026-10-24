@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}Start a conversation — {{ site_name }}{% endblock %}
+{% block description %}Send a link to your journal's archive and I'll tell you what the job looks like. Free, and I'll reply.{% endblock %}
+
+{% block content %}
+
+<section class="prose">
+  <h1 class="page-title">Start a conversation</h1>
+  <p class="lede">The second field does most of the work — a link to your journal's archive. I need
+  a name, an email to reply to, and the journal's name as well. Everything below those four is
+  optional, and you should skip anything you'd have to go look up.</p>
+  <p>I'll typically get back to you within a few days of form submission.</p>
+</section>
+
+<section>
+  {% if store_failed %}
+  <div class="notice" role="alert" tabindex="-1" autofocus>
+    <p>That didn't send. Email me directly at
+    <a href="mailto:{{ fallback_email }}">{{ fallback_email }}</a> and I'll get it.</p>
+  </div>
+  {% elif too_large %}
+  <div class="notice" role="alert" tabindex="-1" autofocus>
+    <p>That was more text than this form accepts, and I'm afraid it didn't come through. Email me
+    at <a href="mailto:{{ contact_email }}">{{ contact_email }}</a> and send it all.</p>
+  </div>
+  {% elif rate_limited %}
+  <div class="notice" role="alert" tabindex="-1" autofocus>
+    <p>That's several submissions in a short window, so I've paused this form for an hour. If it's
+    urgent, email me at <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>
+  </div>
+  {% elif errors %}
+  <div class="notice" role="alert" tabindex="-1" autofocus>
+    <p>A couple of things need fixing before this can send — they're marked below.</p>
+  </div>
+  {% endif %}
+
+  <form class="form" method="post" action="{{ url_for('start') }}" novalidate>
+
+    <p class="hp" aria-hidden="true">
+      <label for="eu-confirm">Leave this field empty</label>
+      <input type="text" id="eu-confirm" name="eu_confirm" tabindex="-1"
+             autocomplete="off">
+    </p>
+
+    <div class="field">
+      <label for="name">Your name</label>
+      <p class="help" id="name-help">Required.</p>
+      <input type="text" id="name" name="name" required autocomplete="name"
+             aria-describedby="name-help{% if errors.name %} name-error{% endif %}"
+             {% if errors.name %}aria-invalid="true"{% endif %}
+             value="{{ values.name or '' }}">
+      {% if errors.name %}<p class="error" id="name-error">{{ errors.name }}</p>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="archive_url">Your journal's archive page</label>
+      <p class="help" id="archive-help">Required. A link to where your back issues live. This is the
+      first thing I look at and it tells me most of what I need to know.</p>
+      <input type="url" id="archive_url" name="archive_url" required
+             placeholder="https://"
+             aria-describedby="archive-help{% if errors.archive_url %} archive-error{% endif %}"
+             {% if errors.archive_url %}aria-invalid="true"{% endif %}
+             value="{{ values.archive_url or '' }}">
+      {% if errors.archive_url %}<p class="error" id="archive-error">{{ errors.archive_url }}</p>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="journal">Journal name</label>
+      <p class="help" id="journal-help">Required.</p>
+      <input type="text" id="journal" name="journal" required
+             aria-describedby="journal-help{% if errors.journal %} journal-error{% endif %}"
+             {% if errors.journal %}aria-invalid="true"{% endif %}
+             value="{{ values.journal or '' }}">
+      {% if errors.journal %}<p class="error" id="journal-error">{{ errors.journal }}</p>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <p class="help" id="email-help">Required. I'll reply, not a system.</p>
+      <input type="email" id="email" name="email" required autocomplete="email"
+             aria-describedby="email-help{% if errors.email %} email-error{% endif %}"
+             {% if errors.email %}aria-invalid="true"{% endif %}
+             value="{{ values.email or '' }}">
+      {% if errors.email %}<p class="error" id="email-error">{{ errors.email }}</p>{% endif %}
+    </div>
+
+    <fieldset>
+      <legend class="field-label">Your role</legend>
+      <div class="choices">
+        {% for option in ["Editor", "Associate or managing editor", "Editorial team or board member",
+                          "Press or platform staff", "Librarian", "Something else"] %}
+        <label>
+          <input type="radio" name="role" value="{{ option }}"
+                 {% if values.role == option %}checked{% endif %}>
+          <span>{{ option }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <fieldset aria-describedby="standing-help">
+      <legend class="field-label">Where the journal stands right now</legend>
+      <p class="help" id="standing-help">The last one is a perfectly normal answer and it's the one
+      I hear most often. Finding out is about a two-minute job.</p>
+      <div class="choices">
+        {% for option in ["We have DOIs and we deposit reference lists",
+                          "We have DOIs but no reference lists",
+                          "We don't have DOIs",
+                          "I honestly don't know"] %}
+        <label>
+          <input type="radio" name="standing" value="{{ option }}"
+                 {% if values.standing == option %}checked{% endif %}>
+          <span>{{ option }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <fieldset aria-describedby="hoping-help">
+      <legend class="field-label">What you're hoping for</legend>
+      <p class="help" id="hoping-help">Check as many as apply, or none.</p>
+      <div class="choices">
+        {% for option in ["Start minting DOIs", "Backfill the back catalog",
+                          "Set up ongoing deposit for new issues",
+                          "Just want to understand the options"] %}
+        <label>
+          <input type="checkbox" name="hoping_for" value="{{ option }}"
+                 {% if option in (values.hoping_for_list or []) %}checked{% endif %}>
+          <span>{{ option }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="notes">Anything else I should know</label>
+      <p class="help" id="notes-help">Editorial team or board concerns, funding constraints, a platform migration
+      underway, a predecessor journal with its own archive — anything that would change the
+      answer.</p>
+      <textarea id="notes" name="notes" aria-describedby="notes-help">{{ values.notes or '' }}</textarea>
+    </div>
+
+    <fieldset>
+      <legend class="field-label">I'd rather talk than write</legend>
+      <div class="choices">
+        <label>
+          <input type="checkbox" name="wants_call" value="yes"
+                 {% if values.wants_call %}checked{% endif %}>
+          <span>Check this and I'll send a couple of times for a call.</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <button class="btn" type="submit">Send</button>
+  </form>
+</section>
+
+{% endblock %}

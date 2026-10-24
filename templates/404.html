@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Not found — {{ site_name }}{% endblock %}
+
+{% block content %}
+<section class="prose">
+  <h1 class="page-title">That page isn't here</h1>
+  <p class="lede">There are only four pages on this site, so this is a short list.</p>
+  <ul>
+    <li><a href="{{ url_for('landing') }}">The front page</a> — what's missing from the record, and why</li>
+    <li><a href="{{ url_for('how') }}">How it works</a> — the process, and the questions editorial teams and boards ask</li>
+    <li><a href="{{ url_for('pinakes') }}">Eunomia and Pinakes</a> — why I'm offering this</li>
+    <li><a href="{{ url_for('start') }}">Start a conversation</a></li>
+  </ul>
+</section>
+{% endblock %}

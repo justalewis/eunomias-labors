@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "bankes-homer",
+    "title": "The Bankes Homer (Papyrus 114 = P. Lond. Lit. 28), Iliad XXIV",
+    "holding": "British Library",
+    "object_page": "https://commons.wikimedia.org/wiki/File:The_Bankes_Homer_(Papyrus_114_%3D_P._Lond._Lit._28).jpg",
+    "license": "Public domain",
+    "attribution": "The Bankes Homer, P. Lond. Lit. 28. British Library. Public domain.",
+    "attribution_required": false,
+    "use": "illustration",
+    "where": "Landing page band. A book roll photographed unrolled — already 6:1.",
+    "files": {
+      "avif": "img/bankes-homer.avif",
+      "webp": "img/bankes-homer.webp"
+    },
+    "width": 2000,
+    "height": 236,
+    "checked": "2026-08-31"
+  },
+  {
+    "slug": "poxy-221",
+    "title": "P.Oxy. 221 — ancient commentary (scholia) on Iliad XXI",
+    "holding": "Oxyrhynchus Papyri",
+    "object_page": "https://commons.wikimedia.org/wiki/File:P._Oxy._221.jpg",
+    "license": "Public domain",
+    "attribution": "P.Oxy. 221. Public domain.",
+    "attribution_required": false,
+    "use": "illustration",
+    "where": "How it works. Secondary scholarship keyed by lemma to a primary text.",
+    "files": {
+      "avif": "img/poxy-221.avif",
+      "webp": "img/poxy-221.webp"
+    },
+    "width": 490,
+    "height": 990,
+    "checked": "2026-08-31"
+  },
+  {
+    "slug": "callimachus-papyrus",
+    "title": "Callimachus, Coma Berenices, papyrus",
+    "holding": "Wikimedia Commons",
+    "object_page": "https://commons.wikimedia.org/wiki/File:Callimachus,_Coma_Berenices,_papyrus.jpg",
+    "license": "Public domain",
+    "attribution": "Callimachus, Coma Berenices, papyrus. Public domain.",
+    "attribution_required": false,
+    "use": "illustration",
+    "where": "Eunomia and Pinakes. Callimachus in his own transmission.",
+    "files": {
+      "avif": "img/callimachus-papyrus.avif",
+      "webp": "img/callimachus-papyrus.webp"
+    },
+    "width": 900,
+    "height": 1408,
+    "checked": "2026-08-31"
+  }
+]

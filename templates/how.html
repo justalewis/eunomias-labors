@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block title %}How it works — {{ site_name }}{% endblock %}
+{% block description %}The whole process for backfilling a journal's reference lists into Crossref, stage by stage, plus honest answers to the questions editorial teams and boards ask.{% endblock %}
+
+{% block content %}
+
+<section class="prose">
+  <h1 class="page-title">How this works</h1>
+  <p class="lede">What follows is the whole process, plus some honest answers to the questions
+  editorial teams and boards have actually asked me. If your editorial team or board has a question
+  that isn't here, send it and I'll add it.</p>
+</section>
+
+<section class="prose">
+  <h2 class="heading">Seven stages</h2>
+
+  <ol class="steps">
+    <li>
+      <h3>1 · You send me a URL</h3>
+      <p>I look at your archive and work out which platform you publish on. Four publishers that
+      I've already worked with can be handled without any new code — works on the WAC
+      Clearinghouse, OJS, Janeway, and bepress/Digital Commons already have tooling designed to
+      complete this process. Anything else outside these forums will get a bespoke downloader written
+      for it (usually a day or two, longer if the archive is doing something genuinely strange with
+      its URLs), which takes more time but isn't hard.</p>
+    </li>
+    <li>
+      <h3>2 · I download your back catalog, slowly</h3>
+      <p>The scraper waits a second between requests, and five to ten seconds where a site looks
+      like it is running on a volunteer's budget. I respect robots.txt without exception, and my
+      contact address rides along in every request I make.</p>
+    </li>
+    <li>
+      <h3>3 · I find out what I'm actually dealing with</h3>
+      <p>Older volumes are often scans with no text layer underneath them. This is the stage where
+      that surfaces and where OCR gets added if the archive needs it. Every journal presents its own
+      particular kind of mess, and the mess is usually in the oldest volumes. This work is slow, so if your archive is in that condition we should discuss timelines early, since I end up doing much of it by hand
+      using my <a href="{{ auditor_url }}">CrossRef Auditor</a>.</p>
+    </li>
+    <li>
+      <h3>4 · I extract the reference lists</h3>
+      <p>Journals that publish HTML galleys present the least difficulty, since the markup already encodes where one citation ends and the next begins. If your journal publishes PDFs, they go through GROBID,
+      an open-source document-structuring library (it is very good and it is not magic — two-column
+      scans and footnote-style citation give it trouble). After that comes a set of repair passes for
+      the things humanities citations actually do: em dashes standing in for a repeated author,
+      entries split across a page break, a notes section glued onto the last works-cited entry,
+      running heads captured as though they were references, etc.</p>
+    </li>
+    <li>
+      <h3>5 · Tooling then looks up every reference in Crossref</h3>
+      <p>Where a reference matches a work that already has a DOI, that DOI gets attached and a live
+      citation link comes into existence. Three checks have to pass before I'll accept a match: at
+      least half the title words overlap, at least one author surname matches, and the publication
+      year falls within one. The checks are deliberately conservative, because a wrong DOI is worse than no DOI. It asserts an identity between two different works and contaminates every analysis downstream of it.</p>
+    </li>
+    <li>
+      <h3>6 · I audit the whole file by hand</h3>
+      <p>Crossref's validator checks that your deposit is well-formed. It does not check whether the
+      contents make sense, which means a paragraph of your own body text can pass validation cleanly
+      and land in the permanent record as a citation. I wrote a separate tool for exactly this problem
+      and released it under the GPL at <a href="{{ auditor_url }}">github.com/justalewis/crossref-references-deposit-auditor</a>,
+      so you can read what it checks. It flags the citations that look wrong, repairs most of them
+      automatically, and puts the remainder in front of me one at a time for manual human review.</p>
+    </li>
+    <li>
+      <h3>7 · You or I deposit it</h3>
+      <p>I hand you a validated file. You submit it under your own Crossref account, or your press
+      does, or I can. I never hold your credentials and I never deposit on your behalf unless you want
+      me to handle the deposit, too.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="prose faq" id="faq">
+  <h2 class="heading">The questions editorial teams and boards ask</h2>
+
+  <p class="faq-tools">
+    <button type="button" id="faq-toggle" class="btn-quiet">Open all nine</button>
+  </p>
+
+  <div id="faq-list">
+    <details class="qa" id="ai">
+      <summary><h3>Where is AI used in this?</h3></summary>
+      <div class="qa-body">
+      <p>I use it to write the scripts, and nowhere else in the process. I prompt Claude Code to help me
+      write the Python that automates each stage, and once those scripts exist they run on their
+      own. The libraries doing the
+      work on your text — GROBID, AnyStyle, Tesseract — are machine learning in the technical sense,
+      though they are labeling technologies and none of them generates any text whatever, and GROBID
+      runs locally in a container on my machine, so your scholarship never leaves that container
+      for anybody's API. There is one opt-in path that would
+      use a language model for extraction if every other method failed on a document. Across six journals
+      I've never needed it, and I don't want to, since API calls would also cost me money.</p>
+      </div>
+    </details>
+    <details class="qa" id="accuracy">
+      <summary><h3>How accurate is it?</h3></summary>
+      <div class="qa-body">
+      <p>Two numbers get confused here, and they measure different things. The first is whether a
+      reference came out of your article intact — the right authors, the right title, one entry where the source had one. That number is high, and every reference gets deposited verbatim whether
+      or not it matches anything else, so your works cited land in the record either way. The second is
+      the match rate: what share of those references point at a work that already carries a DOI of its
+      own. Across the six journals now live that one is about 47 percent, 14,680 of 31,053. Some I matched at deposit, and Crossref runs its own matcher over the rest and keeps working on what remains.
+      The match rate looks low at first glance, especially next to what the big STEM citation databases
+      report, though for a field in the humanities it is unremarkable. We cite books, edited collections, dissertations, conference papers,
+      institutional reports, archival material, and a good deal of gray literature that was never going to
+      have a DOI in the first place. Journals that score lower on this measure are neither worse curated nor less rigorous. <em>Reflections</em> matches lowest, at 28 percent, because a journal of community-engaged
+      writing cites community reports, local organizations, and gray literature that was never
+      DOI-eligible. As you might expect, the genre of citation predicts this number far better than rigor
+      does.</p>
+      </div>
+    </details>
+    <details class="qa" id="unmatched">
+      <summary><h3>What happens to the references that don't match?</h3></summary>
+      <div class="qa-body">
+      <p>They get deposited anyway. Every reference goes in as verbatim citation text along with whatever
+      structured fields could be parsed out of it, matched or not, so the works cited are in the record
+      either way. They also stay matchable: as Crossref's own coverage grows, references deposited today
+      can resolve tomorrow. Crossref automates that backlinking, so the citational record continues to fill in well after the work I do for your journal is finished.</p>
+      </div>
+    </details>
+    <details class="qa" id="credentials">
+      <summary><h3>Who touches our Crossref login?</h3></summary>
+      <div class="qa-body">
+      <p>Nobody but you, unless you ask me to do the deposit for you. Depositor credentials belong to your
+      journal or your press.</p>
+      </div>
+    </details>
+    <details class="qa" id="opt-out">
+      <summary><h3>Can our authors opt out of getting a DOI? Can they opt out of Pinakes?</h3></summary>
+      <div class="qa-body">
+      <p>Two different questions live inside this one and they're worth separating. Whether an author's
+      name appears in the Pinakes index is an author-level decision, and there's
+      <a href="{{ redaction_url }}">a working tool that honors it</a>. Whether your journal deposits
+      reference lists at all is an editorial decision that belongs to your editorial team or board.</p>
+      <p>My own view is that the point of registering a DOI and depositing the citations attached to it
+      is to make an open, shareable record of scholarship so that more scholarship can be built on
+      it. Declining to participate means, in practice, choosing to make
+      your journal's work harder to find and harder to follow. That may be what a given forum wants, and
+      it's a defensible position depending on your particular rhetorical situation. Also of note:
+      publishing open access already entails visibility to the open web, with everything that follows from
+      it, and authors accept that relation when they publish with you.</p>
+      </div>
+    </details>
+    <details class="qa" id="staff-time">
+      <summary><h3>What does this cost us in staff time?</h3></summary>
+      <div class="qa-body">
+      <p>Very little. A full pipeline run over a complete archive has taken between four and a half minutes and just under four hours, depending on the size of the catalog – this is my time to offer to help you move into richly structured metadata practices
+      for your journal. On your side, the back catalog costs you the conversations we have and the time to
+      submit one file. Going forward, depositing a new issue at publication runs about twenty minutes,
+      whether you do it or I do.</p>
+      <p>Set that against the alternative. Hand-keying the 1,185 articles I've done so far for minting
+      DOIs, at an average of twenty-six references each, is at least a month or two of full-time work, and
+      somebody would have to be paid for it.</p>
+      </div>
+    </details>
+    <details class="qa" id="ethics">
+      <summary><h3>Is it ethical to scrape our site?</h3></summary>
+      <div class="qa-body">
+      <p>I think so, under conditions I've tried to state publicly. I've written up nine principles for
+      this kind of collection in a research note forthcoming in <em>The Journal of Writing
+      Analytics</em>, grounded in the Association of Internet Researchers' guidelines and in McKee
+      and Porter's case-based approach. Three of them govern what I would do to your archive.
+      Robots.txt is non-negotiable, and no desire for completeness overrides consent. Requests are
+      rate-limited so that collection never burdens infrastructure a volunteer staff maintains, and where a barrier exists I document the gap instead of engineering around it.</p>
+      <p>I'd also note the narrower thing that makes this case different from most scraping debates.
+      Nothing here is human-subjects data. What gets collected is bibliographic metadata your journal
+      already publishes openly, and the full text of the scholarship stays out of bounds except as the
+      source the reference list is read from.</p>
+      </div>
+    </details>
+    <details class="qa" id="trust">
+      <summary><h3>Why should we trust a one-person project?</h3></summary>
+      <div class="qa-body">
+      <p>I would rather you checked than took my word for it. I am Design and Layout Editor at
+      <em>Literacy in
+      Composition Studies</em>, and LiCS is where I ran this first before I offered it to anybody
+      else's. The tools are open source and you or someone on your editorial team or board can read them
+      (<a href="{{ github_url }}">github.com/justalewis</a> — the auditor, the Janeway plugin, and
+      Pinakes itself). The deliverable is a standard Crossref file that belongs to your journal.</p>
+      </div>
+    </details>
+    <details class="qa" id="method">
+      <summary><h3>Where do the numbers in the table come from?</h3></summary>
+      <div class="qa-body">
+      <p>One pair of queries per journal against Crossref's public REST API, run nightly. The total is
+      <code>api.crossref.org/works?filter=issn:YOUR-ISSN&amp;rows=0</code>, and the count carrying
+      references is the same query with <code>,has-references:true</code> added to the filter. Read
+      <code>total-results</code> off each, and the second divided by the first is the Reference lists
+      percentage. You can run either one in a browser right now. The DOI percentage measures those
+      registrations against the article count <a href="{{ pinakes_url }}/coverage">Pinakes</a> has
+      indexed for the journal.</p>
+      </div>
+    </details>
+  </div>
+
+</section>
+
+<section class="prose">
+  <h2 class="heading">If your editorial team or board wants to take a next step</h2>
+  <p>Send me a link to your archive and I'll tell you what the job looks like for your journal
+  specifically. That costs you nothing and commits you to nothing.</p>
+  <p class="btn-row"><a class="btn" href="{{ url_for('start') }}">Start a conversation</a></p>
+  <p>Or write to me directly at <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='faq.js') }}" defer></script>
+{% endblock %}

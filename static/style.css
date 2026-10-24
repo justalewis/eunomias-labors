@@ -1,0 +1,442 @@
+/* ============================================================
+   Eunomia's Labors — layout and components.
+
+   Reads the tokens in tokens.css and never hard-codes a colour, so
+   red-figure and black-figure both resolve from one palette.
+
+   The system's grammar is the Alexandrian critical apparatus:
+     · the paragraphos — a short stroke in the LEFT MARGIN closing a
+       passage, so section dividers hang in the gutter rather than
+       running the full width
+     · the diple — the margin mark for "worth discussing", used on
+       the process steps and on the rows of completed work
+     · the coronis — the end mark closing a page
+     · the obelos — deprecated guidance, kept and marked, not deleted
+   ============================================================ */
+
+/* -- Skip link ---------------------------------------------- */
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--terracotta); color: var(--added-white);
+  font-family: var(--f-ui); font-weight: 700;
+  padding: var(--space-3) var(--space-4); text-decoration: none;
+}
+.skip:focus { left: var(--space-4); top: var(--space-2); color: var(--added-white); }
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--terracotta);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+main:focus { outline: none; }
+
+/* -- Masthead ------------------------------------------------ */
+.masthead { border-bottom: 1px solid var(--rule); background: var(--papyrus-deep); }
+.masthead-inner {
+  max-width: 68rem; margin: 0 auto;
+  padding: var(--space-4) var(--space-6);
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: var(--space-3) var(--space-6);
+}
+.wordmark { text-decoration: none; color: var(--gloss); line-height: 1.15; }
+.wordmark .name {
+  display: block; font-family: var(--f-display); font-size: 1.45rem;
+}
+.wordmark .sub {
+  display: block; font-family: var(--f-quote); font-style: italic;
+  font-size: var(--text-sm); color: var(--dilute); margin-top: 0.1rem;
+}
+.wordmark:hover .name { color: var(--terracotta); }
+
+.nav {
+  display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5);
+  font-family: var(--f-ui); font-size: var(--text-sm);
+}
+.nav a { color: var(--dilute); text-decoration: none; }
+.nav a:hover { color: var(--terracotta); text-decoration: underline; }
+.nav a[aria-current="page"] { color: var(--gloss); font-weight: 700; }
+.nav .out::after { content: " \2197"; font-size: 0.85em; }
+
+/* -- Page shell ---------------------------------------------- */
+main {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-6) var(--space-20);
+}
+main > section { margin-bottom: var(--space-16); }
+main > section:last-child { margin-bottom: 0; }
+
+/* Garamond italic is a beautiful standfirst and a punishing paragraph. The
+   ledes on this site run to ninety words, so they stay in the body face; the
+   italic does its work in captions, the wordmark and the table caption, where
+   it is never more than a line or two. */
+.lede {
+  font-size: 1.16rem; line-height: 1.6; color: var(--gloss-soft);
+  max-width: 58ch;
+}
+.prose p { max-width: var(--measure); }
+.prose ul, .prose ol { max-width: var(--measure); padding-left: 1.15rem; }
+.prose li { margin-bottom: var(--space-2); }
+.prose li::marker { color: var(--terracotta); }
+
+.page-title { font-size: var(--text-3xl); margin-bottom: var(--space-5); }
+h2.heading { font-size: var(--text-2xl); margin-bottom: var(--space-5); }
+h3.subheading {
+  font-family: var(--f-ui); font-size: var(--text-base); font-weight: 700;
+  margin: var(--space-8) 0 var(--space-2);
+}
+
+/* The paragraphos: a short stroke hanging at the left edge, which is
+   what it was in a book roll — not a full-width rule. */
+main > section + section::before {
+  content: ""; display: block; width: 2.5rem; height: 0;
+  border-top: 2px solid var(--gloss);
+  margin: 0 0 var(--space-10);
+}
+
+/* -- Hero ---------------------------------------------------- */
+.hero { padding-bottom: var(--space-6); }
+.hero h1 {
+  font-size: clamp(2.4rem, 6.5vw, var(--text-4xl));
+  margin-bottom: var(--space-5);
+}
+
+/* The book roll. The Bankes Homer is 5000x590 — already a 6:1 band,
+   so it drops in with no cropping. */
+.roll {
+  margin: var(--space-8) 0 0;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  background: var(--papyrus-deep); overflow: hidden;
+}
+.roll img {
+  display: block; width: 100%; height: auto;
+  max-height: 190px; object-fit: cover; object-position: center 40%;
+  filter: saturate(0.72) contrast(1.04);
+}
+.roll-cap {
+  font-family: var(--f-ui); font-size: var(--text-xs);
+  color: var(--dilute); margin: var(--space-2) 0 0; max-width: 70ch;
+}
+.roll-cap em { font-family: var(--f-body); font-style: italic; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .roll img {
+    filter: saturate(0.55) brightness(0.76) contrast(1.05);
+  }
+}
+:root[data-theme="dark"] .roll img {
+  filter: saturate(0.55) brightness(0.76) contrast(1.05);
+}
+
+/* -- Colophon: the name, explained -----------------------------
+   A discursive aside rather than argument, so it gets its own ground
+   and the Greek set in the display face — which is the reason GFS
+   Didot is here at all. */
+.colophon {
+  background: var(--paper);
+  border-left: 2px solid var(--terracotta);
+  padding: var(--space-6) var(--space-6) var(--space-2);
+}
+.colophon .greek {
+  font-family: var(--f-display);
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--terracotta);
+  margin: 0 0 var(--space-2);
+}
+.colophon h2.heading { margin-bottom: var(--space-4); }
+.colophon p { max-width: 60ch; }
+@media (max-width: 40rem) {
+  .colophon { padding: var(--space-5) var(--space-4) var(--space-2); }
+  .colophon .greek { font-size: 2.1rem; }
+}
+
+/* -- Buttons ------------------------------------------------- */
+.btn {
+  display: inline-block; font-family: var(--f-ui);
+  font-size: var(--text-sm); font-weight: 700;
+  padding: 0.62rem 1.3rem; text-decoration: none;
+  color: var(--added-white); background: var(--terracotta);
+  border: 1px solid var(--terracotta); border-radius: var(--radius-sm);
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.btn:hover {
+  background: var(--terracotta-lift); border-color: var(--terracotta-lift);
+  color: var(--added-white);
+}
+.btn-quiet {
+  font-family: var(--f-ui); font-size: var(--text-sm); font-weight: 700;
+  color: var(--terracotta); background: transparent;
+  border: 1px solid var(--terracotta); border-radius: var(--radius-sm);
+  padding: 0.4rem 0.85rem;
+}
+.btn-quiet:hover { background: var(--terracotta-wash); }
+.btn-row { margin-top: var(--space-6); }
+.btn-note {
+  margin-left: var(--space-3); font-family: var(--f-ui);
+  font-size: var(--text-sm); color: var(--dilute);
+}
+@media (max-width: 32rem) { .btn-note { display: block; margin: var(--space-2) 0 0; } }
+
+/* -- Statistics. Numerals in the display face: a didone's figures are
+      the best thing about it, and the argument is made of them. */
+.stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-5); list-style: none; padding: 0; margin: var(--space-8) 0;
+}
+.stats li { border-top: 2px solid var(--gloss); padding-top: var(--space-3); margin: 0; }
+.stats .num {
+  display: block; font-family: var(--f-display); font-size: 2.5rem;
+  line-height: 1; font-variant-numeric: tabular-nums;
+}
+.stats .label {
+  display: block; font-family: var(--f-ui); font-size: var(--text-xs);
+  color: var(--dilute); margin-top: 0.35rem; line-height: 1.35;
+}
+
+/* -- Callout ------------------------------------------------- */
+.callout {
+  background: var(--paper); border-left: 2px solid var(--terracotta);
+  padding: var(--space-5) var(--space-5) var(--space-4); margin: var(--space-6) 0;
+}
+.callout p:last-child { margin-bottom: 0; }
+
+/* -- The pinax ------------------------------------------------ */
+.table-tools {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-3) var(--space-4); margin: var(--space-6) 0 var(--space-3);
+}
+.table-tools label { font-family: var(--f-ui); font-size: var(--text-sm); color: var(--dilute); }
+.table-tools input[type="search"] {
+  font-family: var(--f-ui); font-size: var(--text-sm);
+  padding: 0.42rem 0.62rem;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-sm);
+  background: var(--paper); color: var(--gloss);
+  min-width: 0; flex: 1 1 15rem;
+}
+#result-count { font-family: var(--f-ui); font-size: var(--text-sm); color: var(--dilute); }
+
+.table-wrap { overflow-x: auto; overflow-y: auto; max-height: 60vh; }
+.table-wrap:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 2px; }
+@media (max-width: 40rem), (max-height: 34rem) { .table-wrap { max-height: none; } }
+
+/* A well-set catalogue: rules above and below the header and at the
+   foot, no vertical rules, no zebra striping, tabular lining figures. */
+table.coverage {
+  border-collapse: collapse; width: 100%;
+  font-family: var(--f-ui); font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+table.coverage caption {
+  caption-side: top; text-align: left;
+  font-family: var(--f-quote); font-style: italic;
+  font-size: var(--text-base); color: var(--dilute);
+  padding: 0 0 var(--space-3);
+}
+table.coverage thead th {
+  font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.09em;
+  font-weight: 700; color: var(--dilute); text-align: left; white-space: nowrap;
+  padding: 0.4rem 0.85rem 0.4rem 0;
+  border-bottom: 2px solid var(--gloss);
+  background: var(--papyrus); position: sticky; top: 0;
+}
+table.coverage th[scope="row"], table.coverage td {
+  padding: 0.5rem 0.85rem 0.5rem 0; text-align: left; vertical-align: top;
+  border-bottom: 1px solid var(--rule); font-weight: 400;
+}
+table.coverage th[scope="row"] { position: relative; }
+table.coverage th[scope="row"] em { font-family: var(--f-body); font-style: italic; }
+table.coverage tbody tr:last-child > * { border-bottom: 2px solid var(--gloss); }
+table.coverage td.num, table.coverage th.num { text-align: right; white-space: nowrap; }
+table.coverage td.num .count { display: block; font-size: var(--text-sm); line-height: 1.3; }
+table.coverage .pub { color: var(--dilute); font-size: var(--text-xs); }
+
+/* The diple marks the rows that are his work. A mark, not a tint: it
+   survives a printout with background graphics off, and it does not
+   depend on colour. */
+table.coverage tr.mine th[scope="row"] { font-weight: 700; }
+table.coverage tr.mine th[scope="row"]::before {
+  content: ""; position: absolute; left: -0.85rem; top: 0.78rem;
+  width: 0; height: 0;
+  border-left: 5px solid var(--terracotta);
+  border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+}
+
+.pct {
+  display: inline-block; font-family: var(--f-mono); font-size: 0.78rem;
+  padding: 0.08em 0.4em; border-radius: var(--radius-sm); margin-top: 0.12rem;
+}
+.pct.good    { background: var(--good-bg); color: var(--good-fg); }
+.pct.partial { background: var(--warn-bg); color: var(--warn-fg); }
+.pct.none    { background: var(--err-bg);  color: var(--err-fg); }
+/* Faience marks absence, and only absence. */
+.pct.no-dois, .pct.unknown { background: var(--faience-wash); color: var(--faience); }
+.pct.no-dois { font-size: var(--text-xs); }
+
+.table-note {
+  font-family: var(--f-ui); font-size: var(--text-xs); color: var(--dilute);
+  margin-top: var(--space-3); max-width: 70ch;
+}
+#no-results { padding: var(--space-5) 0; color: var(--dilute); font-size: var(--text-sm); }
+[hidden] { display: none !important; }
+
+/* -- Process steps -------------------------------------------- */
+.steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; }
+.steps > li { margin-bottom: var(--space-8); }
+.steps h3 {
+  font-family: var(--f-ui); font-size: var(--text-base); font-weight: 700;
+  margin-bottom: var(--space-2); color: var(--terracotta);
+}
+.steps p { max-width: var(--measure); }
+.steps p:last-child { margin-bottom: 0; }
+
+/* -- FAQ ------------------------------------------------------ */
+.faq-tools { margin: var(--space-4) 0 var(--space-6); }
+
+details.qa { border-top: 1px solid var(--rule); }
+details.qa:last-of-type { border-bottom: 1px solid var(--rule); }
+details.qa > summary {
+  cursor: pointer; list-style: none; position: relative;
+  padding: var(--space-4) var(--space-8) var(--space-4) 0;
+}
+details.qa > summary::-webkit-details-marker { display: none; }
+details.qa > summary:hover h3 { color: var(--terracotta); }
+details.qa > summary:focus-visible {
+  outline: 2px solid var(--terracotta); outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+details.qa > summary h3 {
+  display: inline; font-family: var(--f-ui);
+  font-size: var(--text-base); font-weight: 700; margin: 0;
+}
+/* The diple, rotated: closed points right, open points down. */
+details.qa > summary::after {
+  content: ""; position: absolute; right: 0.5rem; top: 50%;
+  width: 0; height: 0; margin-top: -5px;
+  border-left: 6px solid var(--terracotta);
+  border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+  transform-origin: 2px center;
+  transition: transform var(--t-fast);
+}
+details.qa[open] > summary::after { transform: rotate(90deg); }
+.qa-body { padding: 0 0 var(--space-5); }
+.qa-body p { margin-bottom: var(--space-4); max-width: var(--measure); }
+.qa-body p:last-child { margin-bottom: 0; }
+
+/* -- The coronis closes a page ------------------------------- */
+.coronis {
+  display: block; width: 22px; height: 22px;
+  margin: var(--space-10) 0 0; color: var(--dilute-light);
+}
+
+/* -- Obelized: superseded guidance, kept and marked ----------- */
+.obelized { position: relative; color: var(--dilute); padding-left: var(--space-5); }
+.obelized::before {
+  content: "\2E13"; position: absolute; left: 0; top: 0; color: var(--terracotta);
+}
+.obelized .note {
+  display: block; font-family: var(--f-ui); font-size: var(--text-xs);
+  color: var(--dilute-light); margin-top: var(--space-1);
+}
+
+/* -- Form ---------------------------------------------------- */
+.form { margin-top: var(--space-8); max-width: 34rem; }
+.field { margin-bottom: var(--space-6); }
+.field > label, fieldset legend.field-label {
+  display: block; font-family: var(--f-ui); font-weight: 700;
+  font-size: var(--text-sm); margin-bottom: var(--space-1); padding: 0;
+}
+.help {
+  font-family: var(--f-ui); font-size: var(--text-sm); color: var(--dilute);
+  margin: 0 0 var(--space-2); max-width: 46ch;
+}
+.field input[type="text"], .field input[type="email"],
+.field input[type="url"], .field textarea {
+  font-family: var(--f-body); font-size: var(--text-base);
+  width: 100%; padding: 0.55rem 0.7rem;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-sm);
+  background: var(--paper); color: var(--gloss);
+}
+.field textarea { min-height: 7rem; resize: vertical; }
+.field input[aria-invalid="true"], .field textarea[aria-invalid="true"] {
+  border-color: var(--err-fg); border-width: 2px;
+}
+
+fieldset { border: none; padding: 0; margin: 0 0 var(--space-6); }
+.choices { display: grid; gap: var(--space-2); margin-top: var(--space-2); }
+.choices label {
+  display: flex; gap: var(--space-2); align-items: flex-start;
+  font-family: var(--f-ui); font-size: var(--text-sm); font-weight: 400;
+}
+.choices input { margin-top: 0.28em; flex: none; }
+
+.error {
+  font-family: var(--f-ui); color: var(--err-fg);
+  font-size: var(--text-sm); margin: var(--space-1) 0 0;
+}
+.notice {
+  background: var(--warn-bg); color: var(--warn-fg);
+  border-left: 2px solid var(--warn-fg);
+  padding: var(--space-4) var(--space-5); margin-bottom: var(--space-6);
+}
+.notice p:last-child { margin-bottom: 0; }
+.notice:focus-visible { outline: 2px solid var(--warn-fg); outline-offset: 2px; }
+
+/* The honeypot. Off-screen rather than display:none, so bots that
+   check computed style still fill it. */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Visually hidden, still announced. */
+.vh {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* -- Footer -------------------------------------------------- */
+footer.site {
+  border-top: 2px solid var(--gloss); background: var(--papyrus-deep);
+  margin-top: var(--space-20);
+}
+footer.site .inner {
+  max-width: 46rem; margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+  font-family: var(--f-ui); font-size: var(--text-sm); color: var(--dilute);
+}
+footer.site p { max-width: 70ch; }
+footer.site p:last-child { margin-bottom: 0; }
+footer.site .data-line { font-size: var(--text-xs); color: var(--dilute-light); }
+
+@media (max-width: 40rem) {
+  main { padding: var(--space-8) var(--space-4) var(--space-16); }
+  .masthead-inner { padding: var(--space-4); }
+  footer.site .inner { padding: var(--space-6) var(--space-4); }
+  .stats .num { font-size: 2rem; }
+}
+
+/* ============================================================
+   Print. The board reads this on paper.
+   ============================================================ */
+@media print {
+  html, body { background: #fff !important; color: #000 !important; }
+
+  /* Every answer prints, with or without JavaScript. */
+  details.qa > .qa-body { display: block !important; }
+  details.qa::details-content { content-visibility: visible !important; block-size: auto !important; }
+  details.qa > summary::after { display: none; }
+
+  .skip, .nav, .faq-tools, .table-tools, .btn-row, #no-results, .roll { display: none !important; }
+
+  .table-wrap { max-height: none; overflow: visible; }
+  table.coverage thead { display: table-header-group; }
+  table.coverage thead th { position: static; background: none; white-space: normal; }
+  /* Backgrounds drop out in print, so the marked rows need a mark made
+     of characters. */
+  table.coverage tr.mine th[scope="row"]::before {
+    content: "\25B8\00A0"; position: static; border: 0; width: auto; height: auto;
+  }
+
+  h1, h2, h3, summary { break-after: avoid; }
+  details.qa, .steps > li, .callout, tr { break-inside: avoid; }
+  a[href^="http"]::after {
+    content: " <" attr(href) ">"; font-size: 0.85em; word-break: break-all;
+  }
+}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} — DOIs and reference lists for Rhet/Comp journals{% endblock %}
+
+{% block content %}
+
+<section class="hero prose">
+  <h1>Help me build the citational metadata infrastructure for Rhet/Comp</h1>
+
+  <p class="lede">A growing number of open-access journals in rhetoric and composition now mint DOIs for the work they publish, though plenty still don't, and among the ones that do, far fewer have deposited the reference lists that belong to those DOIs. Because Crossref accepts those two deposits separately, a journal can complete the registration half and still deposit nothing whatever about what any of its articles cite. Such a journal remains perfectly citable by anyone who wants to cite it. In the other direction, though, its own citations remain invisible to every service that reads Crossref, and the scholarship it publishes enters the citation record as a destination and never once as a source.</p>
+
+  <p>What stands in the way is the labor involved, since hand-keying twenty or thirty or forty-some references for every article in a back catalog is not work that a volunteer editorial staff can absorb alongside everything else it already carries. Over the past several months I have built the tooling that performs that work instead.</p>
+
+  <figure class="roll">
+    <picture>
+      <source srcset="{{ url_for('static', filename='img/bankes-homer.avif') }}" type="image/avif">
+      <img src="{{ url_for('static', filename='img/bankes-homer.webp') }}"
+           width="2000" height="236" loading="eager" decoding="async"
+           alt="A second-century papyrus of the Iliad, unrolled: columns of Greek
+                capitals with a reader's own marks in the margins.">
+    </picture>
+  </figure>
+  <figcaption class="roll-cap">The Bankes Homer, <em>Iliad</em> XXIV, second century.
+    The marks in its margins are the ancestors of the citation apparatus this site exists to
+    repair. British Library, public domain.</figcaption>
+</section>
+
+<section class="prose colophon">
+  <p class="greek" aria-hidden="true">Εὐνομία</p>
+  <h2 class="heading">A word about the name</h2>
+
+  <p>Eunomia is one of the Horae in Hesiod's <em>Theogony</em>, a daughter of Zeus and Themis and a
+  sister to Dike (justice) and Eirene (peace). Her name gets rendered as good order, though the root in ancient Greek is more specific than that: <em>nomos</em> carries a sense of apportionment, of things
+  distributed to their proper holders, and Solon set her against Dysnomia as the force that
+  straightens crooked judgment.</p>
+
+  <p><a href="{{ pinakes_url }}">Pinakes</a> borrows its name from Callimachus's catalogue of the
+  library at Alexandria, and this project — Eunomia's Labors — is named for the work that has to happen before a catalogue is any use. DOIs and deposited reference lists apportion
+  credit to the scholarship an article actually drew on and provide an ordering identifier to
+  scholarly work. The labor in the title is meant literally, since somebody has to key the citations
+  or write the tooling . . . and that someone is me!</p>
+</section>
+
+<section class="prose">
+  <h2 class="heading">The gap runs along publisher lines</h2>
+
+  <p><em>College English</em> has 10,688 records registered with Crossref. Two hundred eighteen of
+  them carry a reference list. For <em>College Composition and Communication</em> the figures are
+  6,945 and 231. If you restrict either journal to the volumes published before 2000, the count goes to zero: 9,510 articles in <em>College English</em>, 5,544 in <em>CCC</em>, and not one deposited
+  citation between them. <em>College English</em>'s Crossref records start in 1939 and
+  <em>CCC</em>'s in 1950, so six decades of the field's central conversation are, to anything that
+  reads Crossref, effectively invisible.</p>
+
+  <p>Set those numbers beside <em>Written Communication</em> at 87.5 percent reference coverage,
+  <em>Technical Communication Quarterly</em> at 78.9, the <em>Journal of Technical Writing and
+  Communication</em> at 78.8. What predicts the difference is the publisher's infrastructure, since SAGE deposits as a matter of routine, Taylor and Francis does the same, and Elsevier mostly does, with <em>Assessing Writing</em> at 78 percent and <em>Computers and Composition</em> at 64.7. A volunteer-run open-access journal of the kind that characterizes so much of this field deposits when somebody on its volunteer staff has hours to spare for the work . . . which isn't often.</p>
+
+  {% include "_coverage_table.html" %}
+</section>
+
+<section class="prose">
+  <h2 class="heading">Four journals in Rhet/Comp defined broadly now sit at the top of that table</h2>
+
+  <p><em>Across the Disciplines</em> deposits reference lists for 91.6 percent of its Crossref
+  records. <em>Double Helix</em> is at 89.4, <em>The Journal of Writing Analytics</em> at 88.5,
+  <em>Open Words</em> at 86.9. All four are small, volunteer-supported, and hosted by the WAC Clearinghouse, and three of the four now deposit at higher rates than any commercial publisher represented in the same table, with the fourth half a point behind <em>Written Communication</em> and
+  well clear of the rest. Before this spring, not one of them had deposited a single reference
+  list.</p>
+
+  <p>Neither had <em>Reflections</em>, which holds 655 records in Crossref reaching back to 2000 and now carries reference lists on 395 of them, 7,464 references in all. Neither had <em>Literacy in Composition Studies</em>, where I serve as a design &amp; layout editor and where I completed this work on my own before offering to do it for anyone else.</p>
+
+  <ul class="stats">
+    <li><span class="num">1,185</span><span class="label">articles</span></li>
+    <li><span class="num">31,053</span><span class="label">references deposited</span></li>
+    <li><span class="num">14,680</span><span class="label">resolved to a live DOI</span></li>
+    <li><span class="num">6</span><span class="label">journals</span></li>
+  </ul>
+</section>
+
+<section class="prose">
+  <h2 class="heading">Two metadata options</h2>
+
+  <h3 class="subheading">Getting your journal minting DOIs</h3>
+  <p>If your journal has never registered a DOI, this is the foundational half, and it's mostly a
+  matter of paperwork and decisions that I can help you make. I can walk your editorial team through
+  Crossref membership and registration, work out with you what the deposit fees will actually come to
+  before you commit to anything, help you settle on a DOI suffix pattern, and mint DOIs retroactively
+  across your back catalog. The prefix and the credentials stay with your journal throughout, nothing
+  is registered under my name or anybody else's, and your journal keeps full control of the DOIs once
+  they are minted.</p>
+
+  <h3 class="subheading">Backfilling your reference lists</h3>
+  <p>If your journal already mints DOIs but has never deposited the works cited that go with them,
+  this is the second half. I would argue it is the half with the larger payoff. Crossref
+  accepts reference deposits separately from the original metadata deposit, which means the citations
+  can be added to DOIs that already exist without re-registering anything. I build a scraper tuned to
+  your particular archive, pull the reference list out of every article, match what can be matched
+  against existing DOIs, audit the result by hand, and hand you a validated deposit file that you or
+  I can deposit in a single batch to backfill your journal articles' citational record. Minting comes first and backfilling second. Both halves run through the same pipeline, so the schedule is much the same whether your journal starts from DOIs or from nothing.</p>
+</section>
+
+<section class="prose">
+  <h2 class="heading">What does this cost my journal?</h2>
+
+  <p>Nothing, from me. You'll pay Crossref for membership and for the DOIs you register, and I'm glad
+  to help you work out what that comes to before your editorial team or board votes on anything.
+  There's no institutional partnership to negotiate, I'm not affiliated with Crossref in any way, and
+  I'm not selling you software. I undertake this as a service to the discipline and in the interest of a more complete citational record.</p>
+
+  <p>I do have a stake in this: <a href="{{ url_for('pinakes') }}">Here's what it is.</a></p>
+</section>
+
+<section class="prose">
+  <h2 class="heading">What I'd need from you to start</h2>
+
+  <p>You send me a URL, and that is genuinely the whole intake. I examine your archive, determine which publishing platform you are on, and tell you what the undertaking involves and approximately how long it will take. If your journal turns out to be in good shape already, I will tell you that as well, and we can discuss whatever other metadata work would serve it.</p>
+
+  <p class="btn-row"><a class="btn" href="{{ url_for('start') }}">Start a conversation</a></p>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='filter.js') }}" defer></script>
+{% endblock %}

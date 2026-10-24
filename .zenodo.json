@@ -1,0 +1,18 @@
+{
+  "title": "Eunomia's Labors",
+  "upload_type": "software",
+  "description": "A Flask site offering DOI registration and Crossref reference backfilling to rhetoric and composition journals, live at eunomiaslabors.xyz. A coverage table, refreshed nightly from the Crossref API, shows how many records each journal has deposited.",
+  "creators": [
+    {
+      "name": "Lewis, Justin",
+      "orcid": "0000-0003-2144-7971"
+    }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://eunomiaslabors.xyz",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    }
+  ]
+}
